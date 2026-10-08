@@ -425,7 +425,7 @@ const copyPatterns = [
       delete parsed.author;
 
       const {
-        applications,
+        browser_specific_settings: bss,
         permissions: matches = [],
         web_accessible_resources,
       } = parsed;
@@ -435,8 +435,8 @@ const copyPatterns = [
           // set to Manifest V3 (MV3) for Chrome
           parsed.manifest_version = 3;
 
-          // applications is not used on Chrome
-          delete parsed.applications;
+          // Chrome has no use for the Gecko block
+          delete parsed.browser_specific_settings;
 
           // remove MV2-specific background properties
           delete parsed.background.persistent;
@@ -484,10 +484,10 @@ const copyPatterns = [
           parsed.content_scripts[0].matches = [...matches];
 
           // set Firefox-specific permissions
-          const { permissions = [] } = applications.gecko;
+          const { permissions = [] } = bss.gecko;
 
           parsed.permissions.unshift(...permissions);
-          delete applications.gecko.permissions;
+          delete bss.gecko.permissions;
 
           // remove properties not used on Firefox
           delete parsed.background;
